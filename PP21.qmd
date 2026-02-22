@@ -1,0 +1,69 @@
+---
+title: "PP21"
+author: "Sophia Chung"
+format: html
+editor: visual
+---
+  
+# Question 1
+
+We know the posterior distribution from the Gamma-Poisson model: Gamma(4+97=101, 2+32=34).
+
+```{r}
+theta <- seq(2, 4, 0.0001)
+y <- dgamma(theta, 101, 34)
+
+plot(theta, y, type="l", col="seagreen", xlab="theta", ylab="Density", main="Posterior Distribution")
+```
+
+Generally, I want most values to be around 3, but I also want to visit values around 2 and 4 occasionally.
+
+# Question 2: Metropolis Algorithm
+
+- Given $\theta_c$, propose $\theta_p$ from a Normal distribution centered at $\theta_c$.
+- Acceptance probabilities can be computed as follows: a($\theta_c$ --> $\theta_p$) = $\pi$($\theta_p$) / $\pi$($\theta_c$), where $\pi$(theta) = dgamma(theta, 4, 2) * dpois(97, 32*theta).
+- Accept the proposed move with the probability min(1, a).
+  - If the proposed move is accepted, the chain moves to the proposed state.
+  - If the proposed move is rejected, the chain stays in the current state. [This still counts as a step though!]
+
+# Question 3
+
+```{r}
+pi <- function(theta) {
+  if (theta > 0) dgamma(theta, 4, 2) * dpois(97, 32*theta) else 0
+}
+```
+
+```{r}
+pi(2.6) / pi(2.5)
+```
+
+```{r}
+min(1, pi(2.6) / pi(2.5))
+```
+
+We generally want the chain to go towards where the posterior density is highest, in this case towards 3. Because the posterior density is higher at 2.6 than at 2.5, the acceptance probability is 1.
+
+# Question 4
+
+```{r}
+pi(2.4) / pi(2.5)
+```
+
+```{r}
+min(1, pi(2.4) / pi(2.5))
+```
+
+The posterior density is lower at 2.4 than at 2.5, so we do not automatically accept the proposed state. The acceptance probability is 0.506.
+
+# Question 5
+
+```{r}
+pi(2) / pi(2.5)
+```
+
+```{r}
+min(1, pi(2) / pi(2.5))
+```
+
+The posterior density is much lower at 2 than at 2.5, so we do not automatically accept the proposed state. The acceptance probability is now 0.005, which is very low.

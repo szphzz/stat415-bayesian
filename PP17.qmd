@@ -1,0 +1,68 @@
+---
+title: "PP17"
+author: "Sophia Chung"
+format: html
+editor: visual
+---
+
+# Question 1
+
+a) $\sigma$: population SD, person-to-person variability in sleep hours for all CP students
+b) prior SD of 0.5 hrs for $\mu$: uncertainty in population mean sleep hours for CP students, before observing data
+c) SD of the Gamma prior distribution: uncertainty in population SD of sleep hours for CP students, before observing data
+d) $\sigma/\sqrt{n}$: sample-to-sample variability in sample mean sleep hours over many hypothetical samples of CP students
+e) posterior SD for $\mu$: uncertainty in population mean sleep hours for CP students, after observing data
+f) posterior SD for $\sigma$: uncertainty in population SD of sleep hours for CP students, after observing data
+
+# Question 2: Prior Predictive Distribution
+
+- simulate $\mu$ from Normal(8, 0.5)
+- independently simulation $\sigma$ from Gamma(16, 13)
+- given $\mu$ and $\sigma$, simulate y from Normal($\mu$, $\sigma$)
+- repeat many times and summarize y
+
+# Question 3: Posterior Distribution
+
+- simulate $\mu$ from Normal(8, 0.5)
+- independently simulation $\sigma$ from Gamma(16, 13)
+- given $\mu$ and $\sigma$, simulate a sample of 25 y values from Normal($\mu$, $\sigma$). for each sample, compute mean and SD
+- repeat many times
+- keep only repetitions for which the sample mean is 7.1 and the sample SD is 1.5
+- summarize ($\mu$, $\sigma$)
+
+# Question 4
+
+```{r}
+qnorm(c(0.01, 0.99), 7.32, 0.26)
+```
+
+There is posterior credibility of 98% that population mean sleep hours for CP students is between 6.7152 and 7.9249 hours.
+
+# Question 5
+
+```{r}
+qnorm(c(0.01, 0.99), 1.46, 0.18)
+```
+
+There is posterior credibility of 98% that population SD sleep hours for CP students is between 1.0413 and 1.8787 hours.
+
+# Question 6
+
+No, since $\mu$ and $\sigma$ have a joint posterior distribution (Bivariate Normal with correlation 0.16). They are no longer independent like they were under the prior distribution.
+
+# Question 7: Posterior Predictive
+
+- simulate ($\mu$, $\sigma$) from the joint posterior distribution
+- given ($\mu$, $\sigma$), simulate a value of y from Normal(7.32, 1.46)
+- repeat many times and summarize y
+- find the 2.5th and 97.5th percentiles for the endpoints of a 95% posterior prediction interval
+
+# Question 8
+
+There is a 95% posterior predictive probability that the sleep hours for a randomly selected CP student are between 4.42 and 10.32.
+
+# Question 9
+
+- simulate ($\mu$, $\sigma$) from the joint posterior distribution and compute $\sigma/\mu$
+- repeat many times and summarize $\sigma/\mu$
+- find the 1st and 99th percentiles for the endpoints of a 98% posterior credible interval

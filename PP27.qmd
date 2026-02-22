@@ -1,0 +1,51 @@
+---
+title: "PP27"
+author: "Sophia Chung"
+format: html
+editor: visual
+---
+
+# Question 1
+
+```{r Model 1}
+N <- 1000000
+n <- 20
+y_obs <- 2
+theta1 <- rbeta(N, 0.5, 0.5)
+y1 <- rbinom(N, n, theta1)
+likelihood1 <- sum(y1 == y_obs)/N
+likelihood1
+```
+
+```{r Model 2}
+theta2 <- rnorm(N, 0.5, 0.1)
+theta2 <- theta2 * (theta2 >= 0) * (theta2 <= 1) # to ensure valid probs
+y2 <- rbinom(N, n, theta2)
+likelihood2 <- sum(y2 == y_obs)/N
+likelihood2
+```
+
+```{r}
+bayes_factor <- likelihood1/likelihood2
+bayes_factor
+```
+
+# Question 2
+
+```{r}
+posterior_odds1 <- 0.3/0.7 * bayes_factor
+posterior1 <- posterior_odds1/(1 + posterior_odds1)
+posterior2 <- 1 - posterior1
+c(posterior1, posterior2)
+```
+
+# Question 3: Next 10 trials
+
+```{r}
+trials <- 10
+theta1 <- rbeta(trials, 0.5+2, 0.5+18)
+y <- rbinom(trials, n, theta1)
+plot(table(y)/trials,
+     ylab="Posterior predictive probability",
+     main="Given Model 1")
+```

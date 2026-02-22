@@ -1,0 +1,324 @@
+---
+title: "PP13"
+author: "Sophia Chung"
+format: html
+editor: visual
+---
+
+# Question 1
+
+## Prior: Uniform(0, 0.5)
+
+```{r}
+a <- 0
+b <- 0.5
+prior_mean1 <- (a+b)/2
+prior_sd1 <- sqrt((b-a)^2/12) # smaller degree of certainty
+c(prior_mean1, prior_sd1)
+```
+
+```{r}
+1 - punif(0.5, a, b) # prior prob that theta > 0.5
+```
+
+## Prior: Beta(250, 750)
+
+```{r}
+alpha_prior <- 250
+beta_prior <- 750
+prior_mean2 <- alpha_prior/(alpha_prior+beta_prior)
+prior_sd2 <- sqrt(prior_mean2*(1-prior_mean2)/(alpha_prior+beta_prior+1)) # larger degree of certainty
+c(prior_mean2, prior_sd2)
+```
+
+```{r}
+1 - pbeta(0.5, alpha_prior, beta_prior) # prior prob that theta > 0.5
+```
+
+# Question 2
+
+## Prior: Uniform(0, 0.5) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- rep(1, length(theta))
+prior[theta > 0.5] <- 0
+prior <- prior/sum(prior)
+
+n <- 100
+y <- 60
+
+likelihood <- dbinom(y, n, theta)
+
+product <- likelihood*prior
+posterior <- product/sum(product)
+
+post_mean1 <- sum(theta*posterior)
+post_sd1 <- sqrt(sum(theta^2*posterior)-post_mean1^2)
+c(post_mean1, post_sd1)
+```
+
+```{r}
+ylim = c(0, max(c(prior, posterior, likelihood/sum(likelihood))))
+plot(theta, prior, type='l', xlim=c(0, 1), ylim=ylim, col="skyblue", xlab='theta', ylab='')
+par(new=T)
+plot(theta, likelihood/sum(likelihood), type='l', xlim=c(0, 1), ylim=ylim, col="orange", xlab='', ylab='')
+par(new=T)
+plot(theta, posterior, type='l', xlim=c(0, 1), ylim=ylim, col="seagreen", xlab='', ylab='')
+legend("topleft", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+## Prior: Beta(250, 750) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- dbeta(theta, alpha_prior, beta_prior)
+
+n <- 100
+y <- 60
+
+likelihood <- dbinom(y, n, theta)
+
+alpha_post <- alpha_prior+y
+beta_post <- beta_prior+n-y
+posterior <- dbeta(theta, alpha_post, beta_post)
+
+post_mean2 <- alpha_post/(alpha_post+beta_post)
+post_sd2 <- sqrt(post_mean2*(1-post_mean2)/(alpha_post+beta_post+1))
+c(post_mean2, post_sd2)
+```
+
+```{r}
+1 - pbeta(0.5, alpha_post, beta_post) # posterior prob that theta > 0.5
+```
+
+```{r}
+ymax = max(c(prior, posterior))
+scaled_likelihood = likelihood * ymax / max(likelihood)
+
+plot(theta, prior, type='l', col='skyblue', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+par(new=T)
+plot(theta, scaled_likelihood, type='l', col='orange', xlim=c(0, 1), ylim=c(0, ymax), ylab='',  yaxt='n')
+par(new=T)
+plot(theta, posterior, type='l', col='seagreen', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+legend("topright", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+# Question 3
+
+## Prior: Uniform(0, 0.5) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- rep(1, length(theta))
+prior[theta > 0.5] <- 0
+prior <- prior/sum(prior)
+
+n <- 1000
+y <- 600
+
+likelihood <- dbinom(y, n, theta)
+
+product <- likelihood*prior
+posterior <- product/sum(product)
+
+post_mean1 <- sum(theta*posterior)
+post_sd1 <- sqrt(sum(theta^2*posterior)-post_mean1^2)
+c(post_mean1, post_sd1)
+```
+
+```{r}
+ylim = c(0, max(c(prior, posterior, likelihood/sum(likelihood))))
+plot(theta, prior, type='l', xlim=c(0, 1), ylim=ylim, col="skyblue", xlab='theta', ylab='')
+par(new=T)
+plot(theta, likelihood/sum(likelihood), type='l', xlim=c(0, 1), ylim=ylim, col="orange", xlab='', ylab='')
+par(new=T)
+plot(theta, posterior, type='l', xlim=c(0, 1), ylim=ylim, col="seagreen", xlab='', ylab='')
+legend("topleft", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+## Prior: Beta(250, 750) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- dbeta(theta, alpha_prior, beta_prior)
+
+n <- 1000
+y <- 600
+
+likelihood <- dbinom(y, n, theta)
+
+alpha_post <- alpha_prior+y
+beta_post <- beta_prior+n-y
+posterior <- dbeta(theta, alpha_post, beta_post)
+
+post_mean2 <- alpha_post/(alpha_post+beta_post)
+post_sd2 <- sqrt(post_mean2*(1-post_mean2)/(alpha_post+beta_post+1))
+c(post_mean2, post_sd2)
+```
+
+```{r}
+1 - pbeta(0.5, alpha_post, beta_post) # posterior prob that theta > 0.5
+```
+
+```{r}
+ymax = max(c(prior, posterior))
+scaled_likelihood = likelihood * ymax / max(likelihood)
+
+plot(theta, prior, type='l', col='skyblue', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+par(new=T)
+plot(theta, scaled_likelihood, type='l', col='orange', xlim=c(0, 1), ylim=c(0, ymax), ylab='',  yaxt='n')
+par(new=T)
+plot(theta, posterior, type='l', col='seagreen', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+legend("topright", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+# Question 4
+
+## Prior: Uniform(0, 0.5) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- rep(1, length(theta))
+prior[theta > 0.5] <- 0
+prior <- prior/sum(prior)
+
+n <- 2000
+y <- 1200
+
+likelihood <- dbinom(y, n, theta)
+
+product <- likelihood*prior
+posterior <- product/sum(product)
+
+post_mean1 <- sum(theta*posterior)
+post_sd1 <- sqrt(sum(theta^2*posterior)-post_mean1^2)
+c(post_mean1, post_sd1)
+```
+
+```{r}
+ylim = c(0, max(c(prior, posterior, likelihood/sum(likelihood))))
+plot(theta, prior, type='l', xlim=c(0, 1), ylim=ylim, col="skyblue", xlab='theta', ylab='')
+par(new=T)
+plot(theta, likelihood/sum(likelihood), type='l', xlim=c(0, 1), ylim=ylim, col="orange", xlab='', ylab='')
+par(new=T)
+plot(theta, posterior, type='l', xlim=c(0, 1), ylim=ylim, col="seagreen", xlab='', ylab='')
+legend("topleft", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+## Prior: Beta(250, 750) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- dbeta(theta, alpha_prior, beta_prior)
+
+n <- 2000
+y <- 1200
+
+likelihood <- dbinom(y, n, theta)
+
+alpha_post <- alpha_prior+y
+beta_post <- beta_prior+n-y
+posterior <- dbeta(theta, alpha_post, beta_post)
+
+post_mean2 <- alpha_post/(alpha_post+beta_post)
+post_sd2 <- sqrt(post_mean2*(1-post_mean2)/(alpha_post+beta_post+1))
+c(post_mean2, post_sd2)
+```
+
+```{r}
+1 - pbeta(0.5, alpha_post, beta_post) # posterior prob that theta > 0.5
+```
+
+```{r}
+ymax = max(c(prior, posterior))
+scaled_likelihood = likelihood * ymax / max(likelihood)
+
+plot(theta, prior, type='l', col='skyblue', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+par(new=T)
+plot(theta, scaled_likelihood, type='l', col='orange', xlim=c(0, 1), ylim=c(0, ymax), ylab='',  yaxt='n')
+par(new=T)
+plot(theta, posterior, type='l', col='seagreen', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+legend("topleft", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+# Question 5
+
+## Prior: Uniform(0, 0.5) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- rep(1, length(theta))
+prior[theta > 0.5] <- 0
+prior <- prior/sum(prior)
+
+n <- 3000
+y <- 1800
+
+likelihood <- dbinom(y, n, theta)
+
+product <- likelihood*prior
+posterior <- product/sum(product)
+
+post_mean1 <- sum(theta*posterior)
+post_sd1 <- sqrt(sum(theta^2*posterior)-post_mean1^2)
+c(post_mean1, post_sd1)
+```
+
+```{r}
+ylim = c(0, max(c(prior, posterior, likelihood/sum(likelihood))))
+plot(theta, prior, type='l', xlim=c(0, 1), ylim=ylim, col="skyblue", xlab='theta', ylab='')
+par(new=T)
+plot(theta, likelihood/sum(likelihood), type='l', xlim=c(0, 1), ylim=ylim, col="orange", xlab='', ylab='')
+par(new=T)
+plot(theta, posterior, type='l', xlim=c(0, 1), ylim=ylim, col="seagreen", xlab='', ylab='')
+legend("topleft", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+## Prior: Beta(250, 750) --\> Posterior
+
+```{r}
+theta <- seq(0, 1, 0.0001)
+
+prior <- dbeta(theta, alpha_prior, beta_prior)
+
+n <- 3000
+y <- 1800
+
+likelihood <- dbinom(y, n, theta)
+
+alpha_post <- alpha_prior+y
+beta_post <- beta_prior+n-y
+posterior <- dbeta(theta, alpha_post, beta_post)
+
+post_mean2 <- alpha_post/(alpha_post+beta_post)
+post_sd2 <- sqrt(post_mean2*(1-post_mean2)/(alpha_post+beta_post+1))
+c(post_mean2, post_sd2)
+```
+
+```{r}
+1 - pbeta(0.5, alpha_post, beta_post) # posterior prob that theta > 0.5
+```
+
+```{r}
+ymax = max(c(prior, posterior))
+scaled_likelihood = likelihood * ymax / max(likelihood)
+
+plot(theta, prior, type='l', col='skyblue', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+par(new=T)
+plot(theta, scaled_likelihood, type='l', col='orange', xlim=c(0, 1), ylim=c(0, ymax), ylab='',  yaxt='n')
+par(new=T)
+plot(theta, posterior, type='l', col='seagreen', xlim=c(0, 1), ylim=c(0, ymax), ylab='', yaxt='n')
+legend("topleft", c("prior", "scaled likelihood", "posterior"), lty=1, col=c("skyblue", "orange", "seagreen"))
+```
+
+# Question 6
+
+The data in questions 2-5 all have the same sample proportion $\hat{p}$, but with increasingly large sample sizes. Stubborn priors can be swayed with enough a large enough sample size. Also, a prior probability of zero will always be zero.

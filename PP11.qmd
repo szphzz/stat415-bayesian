@@ -1,0 +1,29 @@
+---
+title: "PP11"
+author: "Sophia Chung"
+format: html
+editor: visual
+---
+
+# Question 1
+
+```{r}
+# approx prior predictive dist
+N_sim <- 10000
+theta <- rnorm(N_sim, 98.6, 2) # prior
+y <- rnorm(N_sim, theta, 1) # body temps
+hist(y, xlab="Body Temperatures")
+```
+
+We simulate some very high body temperatures (more than 105 degrees Fahrenheit), which seem unreasonable.
+
+## Question 2
+
+```{r}
+N_sim <- 10000
+theta <- rnorm(N_sim, 98.6, 0.5) # prior
+y <- rnorm(N_sim, theta, 1)
+hist(y, xlab="Body Temperatures")
+```
+
+I decreased the prior SD to 0.5 from 2 to narrow the range of body temperatures. So, my prior distribution is a Normal distribution with a mean of 98.6 and SD of 0.5. I think that decreasing SD any further wouldn't cover a wide enough range of body temperatures.

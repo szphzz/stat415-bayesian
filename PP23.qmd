@@ -1,0 +1,63 @@
+---
+title: "PP23"
+author: "Sophia Chung"
+format: html
+editor: visual
+---
+
+# Question 1
+
+The posterior mean is a weighted average between the prior mean and the observed statistic. We do not know the prior mean, so an educated guess would be that the posterior mean is close to the observed statistic.
+
+## a) $\beta_1$
+
+The observed regression slope is $r*s_y/s_x$.
+
+```{r}
+0.875*2.55/2.81
+```
+
+## b) $\beta_0$
+
+The observed regression intercept is $\bar{y} - \beta_1*\bar{x}$.
+
+```{r}
+15.6 - 0.875*2.55/2.81*15.7
+```
+
+## c) sigma
+
+The observed RMSE is $s_y\sqrt{1 - r^2}$.
+
+```{r}
+2.55*sqrt(1-0.875^2)
+```
+
+# Question 2: 98% Posterior Credible Interval for $\beta_1$
+
+```{r}
+c(0.794 - 2.33*0.07, 0.794 +2.33*0.07)
+```
+
+There is a posterior probability of 98% that on average, a one inch increase in jaw width is associated with between a 0.631 and 0.957 increase in length.
+
+# Question 3: Simulation for Posterior Credible Interval
+
+- Simulate $(\beta_0, \beta_1)$ from their joint posterior distribution
+- Given $(\beta_0, \beta_1)$, compute $\mu_{20} = \beta_0 + \beta_1(20-\bar{x})$
+- Repeat many times and summarize the values of $\mu_{20}$
+
+# Question 4: Simulation for Posterior Prediction Interval
+
+- Simulate $(\beta_0, \beta_1, \sigma)$ from their joint posterior distribution
+- Given $(\beta_0, \beta_1)$, compute $\mu_{20} = \beta_0 + \beta_1(20-\bar{x})$
+- Simulate y from a Normal distribution with mean = $\mu_{20}$ and standard deviation = $\sigma$
+- Repeat many times and summarize the values of y
+
+# Question 5
+
+The prediction interval will be wider than the credible interval, which means that [15, 23] is the prediction interval.
+
+There is a posterior probability of 98% that a shark with a jaw width of 20 inches is between 15 and 23 feet long.
+
+There is a posterior credibility of 98% that the mean length for sharks with a jaw width of 20 inches is between 18.3 and 19.7 feet.

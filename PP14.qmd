@@ -1,0 +1,30 @@
+---
+title: "PP14"
+author: "Sophia Chung"
+format: html
+editor: visual
+---
+
+```{r}
+library(brms)
+```
+
+# Example 12.3
+
+- plot post
+- find post mean, sd, 50, 80 98
+
+```{r}
+data <- data.frame(y=c(rep(1, 31), rep(0, 4))) # 31 successes, 4 failures
+
+fit <-
+  brm(data = data, 
+      family = bernoulli(link = logit),
+      formula = y ~ 1,
+      prior(beta(3, 1), class = Intercept),
+      iter = 11000,
+      warmup = 1000,
+      chains = 1,
+      refresh = 0)
+  
+```
